@@ -5,6 +5,7 @@ import { SigninDto } from './DTOs/signin.dto';
 import { SignupDto } from './DTOs/signup.dto';
 import { Auth } from '../decorators/auth.decorator';
 import { AuthType } from '../enums/auth-types.enums';
+import { RefreshTokenDto } from './DTOs/refresh-token.dto';
 
 @Controller('auth')
 export class AuthenticationController {
@@ -27,6 +28,13 @@ export class AuthenticationController {
     //   sameSite: true,
     //   secure: true,
     // });
+  }
+
+  @Auth(AuthType.None)
+  @Post('refresh-token')
+  @HttpCode(HttpStatus.OK)
+  refresh(@Body() data: RefreshTokenDto) {
+    return this.signinService.refreshTokens(data);
   }
 
   @Auth(AuthType.None)

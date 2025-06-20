@@ -1,10 +1,18 @@
-import { BadRequestException, Inject, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Inject,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { UserService } from 'src/user/user.service';
 import { HashingService } from '../hashing/hashing.service';
 import { SigninDto } from './DTOs/signin.dto';
 import { ConfigType } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import jwtConfig from '../config/jwt.config';
+import { UserEntity } from 'src/user/user.entity';
+import { ActiveUserInterface } from '../interfaces/active-user.interface';
+import { RefreshTokenDto } from './DTOs/refresh-token.dto';
 
 @Injectable()
 export class SigninService {
@@ -34,22 +42,65 @@ export class SigninService {
       throw new BadRequestException('Invalid credentials');
     }
 
-    const accessToken = await this.jwtService.signAsync(
+    return await this.generateTokens(doesUserExist);
+  }
+
+  async refreshTokens(data: RefreshTokenDto) {
+    try {
+      const { sub } = await this.jwtService.verifyAsync<ActiveUserInterface>(
+        data.refreshToken,
+        {
+          secret: this.jwtConfiguration.secret,
+          audience: this.jwtConfiguration.audience,
+          issuer: this.jwtConfiguration.issuer,
+        },
+      );
+
+      const user = await this.userService.findOneUserByFields({
+        id: parseInt(String(sub), 10),
+      });
+
+      if (!user) {
+        throw new UnauthorizedException();
+      }
+
+      return await this.generateTokens(user);
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (error) {
+      throw new UnauthorizedException();
+    }
+  }
+
+  private async generateTokens(user: UserEntity) {
+    const [accessToken, refreshToken] = await Promise.all([
+      this.singToken(user.id, this.jwtConfiguration.accessTokenTtl, {
+        email: user.email,
+      }),
+      this.singToken(user.id, this.jwtConfiguration.refreshTokenTtl),
+    ]);
+
+    return {
+      accessToken,
+      refreshToken,
+    };
+  }
+
+  private async singToken(
+    userId: string | number,
+    expiresIn: number,
+    payload?: Record<string, unknown>,
+  ): Promise<string> {
+    return await this.jwtService.signAsync(
       {
-        sub: doesUserExist.id,
-        userId: doesUserExist.id,
-        email: doesUserExist.email,
+        sub: userId,
+        ...(payload && payload),
       },
       {
         audience: this.jwtConfiguration.audience,
         issuer: this.jwtConfiguration.issuer,
         secret: this.jwtConfiguration.secret,
-        expiresIn: parseInt(process.env.JWT_ACCESS_TOKEN_TTL ?? '3600', 10),
+        expiresIn,
       },
     );
-
-    return {
-      accessToken,
-    };
   }
 }
