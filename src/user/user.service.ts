@@ -15,11 +15,11 @@ export class UserService {
   async findOneUserByFields(
     fields: Partial<UserInterface>,
   ): Promise<UserEntity | null> {
-    return await this.userRepository.findOne({ where: fields });
+    return await this.userRepository.findOneBy(fields);
   }
 
-  async findUserById(id: number): Promise<UserEntity | null> {
-    return await this.userRepository.findOne({ where: { id } });
+  async findUserByIdOrFail(id: number) {
+    return await this.userRepository.findOneByOrFail({ id });
   }
 
   async createUser(user: SignupDto): Promise<UserEntity> {

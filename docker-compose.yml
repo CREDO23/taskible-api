@@ -18,3 +18,9 @@ services:
     environment:
       POSTGRES_PASSWORD: pas123
       POSTGRES_DB: team_tasks_management_test
+  redis:
+    image: redis
+    restart: always
+    ports:
+      - 6379:6379
+    

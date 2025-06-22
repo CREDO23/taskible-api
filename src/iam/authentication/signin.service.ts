@@ -11,8 +11,10 @@ import { ConfigType } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import jwtConfig from '../config/jwt.config';
 import { UserEntity } from 'src/user/user.entity';
-import { ActiveUserInterface } from '../interfaces/active-user.interface';
 import { RefreshTokenDto } from './DTOs/refresh-token.dto';
+import { randomUUID } from 'crypto';
+import { RefreshTokenIdsStorage } from './refresh-token-ids.storage';
+import { RefreshTokenPayloadType } from '../types/refresh-token-payload.type';
 
 @Injectable()
 export class SigninService {
@@ -22,6 +24,7 @@ export class SigninService {
     private readonly jwtService: JwtService,
     @Inject(jwtConfig.KEY)
     private readonly jwtConfiguration: ConfigType<typeof jwtConfig>,
+    private readonly refreshTokenIdsStorage: RefreshTokenIdsStorage,
   ) {}
 
   async signin(data: SigninDto) {
@@ -47,20 +50,32 @@ export class SigninService {
 
   async refreshTokens(data: RefreshTokenDto) {
     try {
-      const { sub } = await this.jwtService.verifyAsync<ActiveUserInterface>(
-        data.refreshToken,
-        {
-          secret: this.jwtConfiguration.secret,
-          audience: this.jwtConfiguration.audience,
-          issuer: this.jwtConfiguration.issuer,
-        },
+      const { sub, refreshTokenId } =
+        await this.jwtService.verifyAsync<RefreshTokenPayloadType>(
+          data.refreshToken,
+          {
+            secret: this.jwtConfiguration.secret,
+            audience: this.jwtConfiguration.audience,
+            issuer: this.jwtConfiguration.issuer,
+          },
+        );
+
+      const isRefreshTokenValid = await this.refreshTokenIdsStorage.validate(
+        parseInt(String(sub), 10),
+        refreshTokenId,
       );
 
-      const user = await this.userService.findOneUserByFields({
-        id: parseInt(String(sub), 10),
-      });
+      if (!isRefreshTokenValid) {
+        throw new UnauthorizedException();
+      }
 
-      if (!user) {
+      const user = await this.userService.findUserByIdOrFail(
+        parseInt(String(sub), 10),
+      );
+
+      if (isRefreshTokenValid) {
+        await this.refreshTokenIdsStorage.invalidate(user.id);
+      } else {
         throw new UnauthorizedException();
       }
 
@@ -72,12 +87,18 @@ export class SigninService {
   }
 
   private async generateTokens(user: UserEntity) {
+    const refreshTokenId = randomUUID();
+
     const [accessToken, refreshToken] = await Promise.all([
       this.singToken(user.id, this.jwtConfiguration.accessTokenTtl, {
         email: user.email,
       }),
-      this.singToken(user.id, this.jwtConfiguration.refreshTokenTtl),
+      this.singToken(user.id, this.jwtConfiguration.refreshTokenTtl, {
+        refreshTokenId: refreshTokenId,
+      }),
     ]);
+
+    await this.refreshTokenIdsStorage.insert(user.id, refreshTokenId);
 
     return {
       accessToken,

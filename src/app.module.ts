@@ -9,6 +9,7 @@ import { TaskPriorityModule } from './task-priority/task-priority.module';
 import { ConfigModule } from '@nestjs/config';
 import { CommonModule } from './common/common.module';
 import { IamModule } from './iam/iam.module';
+import { RedisModule } from './redis/redis.module';
 import * as Joi from '@hapi/joi';
 
 @Module({
@@ -22,6 +23,7 @@ import * as Joi from '@hapi/joi';
         DB_DATABASE: Joi.string().required(),
       }),
     }),
+    RedisModule,
     TaskModule,
     TypeOrmModule.forRoot({
       type: 'postgres',

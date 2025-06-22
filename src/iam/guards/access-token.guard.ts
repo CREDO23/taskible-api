@@ -10,6 +10,7 @@ import { Request } from 'express';
 import jwtConfig from '../config/jwt.config';
 import { ConfigType } from '@nestjs/config';
 import { REQUEST_USER_KEY } from '../constants';
+import { AccessTokenPayloadType } from '../types/acess-token.payload.type';
 
 @Injectable()
 export class AccessTokenGuard implements CanActivate {
@@ -29,9 +30,12 @@ export class AccessTokenGuard implements CanActivate {
     }
 
     try {
-      const payload: unknown = await this.jwtService.verifyAsync(token, {
-        secret: this.jwtConfiguration.secret,
-      });
+      const payload = await this.jwtService.verifyAsync<AccessTokenPayloadType>(
+        token,
+        {
+          secret: this.jwtConfiguration.secret,
+        },
+      );
       request[REQUEST_USER_KEY] = payload;
       // TODO : Extends the request object in the express namespace with 'user' property
     } catch {
