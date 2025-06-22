@@ -6,12 +6,7 @@ export class RefreshTokenIdsStorage {
   constructor(private readonly redisService: RedisService) {}
 
   async insert(userId: number, tokenId: string) {
-    const res = await this.redisService.redisClient.set(
-      this.getKey(userId),
-      tokenId,
-    );
-
-    console.log(res);
+    await this.redisService.redisClient.set(this.getKey(userId), tokenId);
   }
 
   async validate(userId: number, tokenId: string) {
