@@ -1,4 +1,4 @@
-import { RoleEnum } from 'src/contracts/role/role.enums';
+import { RoleEnum } from 'src/role/types/role.enums';
 import { UserInterface } from 'src/contracts/user/user.interface';
 import { TaskEntity } from 'src/task/task.entity';
 import {
