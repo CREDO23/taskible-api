@@ -3,9 +3,9 @@ import { SigninService } from './signin.service';
 import { SignupService } from './signup.service';
 import { SigninDto } from './DTOs/signin.dto';
 import { SignupDto } from './DTOs/signup.dto';
-import { Auth } from '../decorators/auth.decorator';
-import { AuthType } from '../enums/auth-types.enums';
+import { AuthType } from './enums/auth-types.enums';
 import { RefreshTokenDto } from './DTOs/refresh-token.dto';
+import { Auth } from './decorators/auth.decorator';
 
 @Controller('auth')
 export class AuthenticationController {

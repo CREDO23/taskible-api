@@ -9,10 +9,10 @@ import jwtConfig from './config/jwt.config';
 import { ConfigModule } from '@nestjs/config';
 import { UserModule } from 'src/user/user.module';
 import { APP_GUARD } from '@nestjs/core';
-import { AccessTokenGuard } from './guards/access-token.guard';
-import { AuthenticationGuard } from './guards/authentication.guard';
 import { RefreshTokenIdsStorage } from './authentication/refresh-token-ids.storage';
 import { RedisModule } from 'src/redis/redis.module';
+import { AccessTokenGuard } from './authentication/guards/access-token.guard';
+import { AuthenticationGuard } from './authentication/guards/authentication.guard';
 
 @Module({
   imports: [

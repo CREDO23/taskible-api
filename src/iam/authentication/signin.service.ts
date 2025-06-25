@@ -14,7 +14,7 @@ import { UserEntity } from 'src/user/user.entity';
 import { RefreshTokenDto } from './DTOs/refresh-token.dto';
 import { randomUUID } from 'crypto';
 import { RefreshTokenIdsStorage } from './refresh-token-ids.storage';
-import { RefreshTokenPayloadType } from '../types/refresh-token-payload.type';
+import { RefreshTokenPayloadType } from './types/refresh-token-payload.type';
 
 @Injectable()
 export class SigninService {
