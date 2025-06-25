@@ -1,5 +1,6 @@
 import { Controller, Get, HttpCode, HttpStatus } from '@nestjs/common';
 import { UserService } from './user.service';
+import { Roles } from 'src/iam/authorization/decorators/role.decorator';
 
 @Controller('users')
 export class UserController {
@@ -7,6 +8,7 @@ export class UserController {
 
   @Get()
   @HttpCode(HttpStatus.OK)
+  @Roles('admin')
   async getAllUsers() {
     return this.userService.getAllUsers();
   }

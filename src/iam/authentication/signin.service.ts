@@ -92,6 +92,7 @@ export class SigninService {
     const [accessToken, refreshToken] = await Promise.all([
       this.singToken(user.id, this.jwtConfiguration.accessTokenTtl, {
         email: user.email,
+        role: user.role,
       }),
       this.singToken(user.id, this.jwtConfiguration.refreshTokenTtl, {
         refreshTokenId: refreshTokenId,

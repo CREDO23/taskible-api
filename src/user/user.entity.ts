@@ -27,7 +27,7 @@ export class UserEntity implements UserInterface {
   @Column({
     type: 'enum',
     enum: RoleEnum,
-    default: RoleEnum.USER,
+    default: RoleEnum.ADMIN,
   })
   role: string;
 
