@@ -14,11 +14,15 @@ import { RedisModule } from 'src/redis/redis.module';
 import { AccessTokenGuard } from './authentication/guards/access-token.guard';
 import { AuthenticationGuard } from './authentication/guards/authentication.guard';
 import { RolesGuard } from './authorization/guards/roles.guard';
-import { ApiKeysService } from './authentication/api-keys.service';
+import { ApiKeyService } from './authentication/api-keys.service';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { ApiKeyEntity } from './api-key/entities/api-key.entity';
+import { ApiKeyGuard } from './authentication/guards/api-key.guard';
 
 @Module({
   imports: [
     UserModule,
+    TypeOrmModule.forFeature([ApiKeyEntity]),
     JwtModule.registerAsync(jwtConfig.asProvider()),
     ConfigModule.forFeature(jwtConfig),
     RedisModule,
@@ -39,8 +43,9 @@ import { ApiKeysService } from './authentication/api-keys.service';
     SigninService,
     SignupService,
     AccessTokenGuard,
+    ApiKeyGuard,
     RefreshTokenIdsStorage,
-    ApiKeysService,
+    ApiKeyService,
   ],
   controllers: [AuthenticationController],
 })

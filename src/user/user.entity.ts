@@ -11,7 +11,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { ApiKeyEntity } from './api-key/entities/api-key.entity';
+import { ApiKeyEntity } from '../iam/api-key/entities/api-key.entity';
 
 @Entity('user')
 export class UserEntity implements UserInterface {

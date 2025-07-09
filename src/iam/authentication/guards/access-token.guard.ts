@@ -11,6 +11,7 @@ import { ConfigType } from '@nestjs/config';
 import jwtConfig from 'src/iam/config/jwt.config';
 import { REQUEST_USER_KEY } from 'src/iam/constants';
 import { AccessTokenPayloadType } from '../types/acess-token.payload.type';
+import { AuthTypeEnum } from '../enums/auth-types.enums';
 
 @Injectable()
 export class AccessTokenGuard implements CanActivate {
@@ -46,7 +47,8 @@ export class AccessTokenGuard implements CanActivate {
   }
 
   extractTokenFromHeader(request: Request): string | undefined {
-    const [, token] = request.headers.authorization?.split(' ') ?? [];
-    return token;
+    const [authType, token] = request.headers.authorization?.split(' ') ?? [];
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-enum-comparison
+    return authType === AuthTypeEnum.Bearer ? token : undefined;
   }
 }

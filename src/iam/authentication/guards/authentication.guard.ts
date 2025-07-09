@@ -6,28 +6,31 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { AuthType } from '../enums/auth-types.enums';
+import { AuthTypeEnum } from '../enums/auth-types.enums';
 import { AccessTokenGuard } from './access-token.guard';
+import { ApiKeyGuard } from './api-key.guard';
 
 @Injectable()
 export class AuthenticationGuard implements CanActivate {
-  private static readonly defaultAuthType = AuthType.Bearer;
+  private static readonly defaultAuthType = AuthTypeEnum.Bearer;
   private readonly authTypeGuardMap: Record<
-    AuthType,
+    AuthTypeEnum,
     CanActivate | CanActivate[]
   >;
 
   constructor(
     private readonly reflector: Reflector,
     private readonly accessTokenGuard: AccessTokenGuard,
+    private readonly apiKeyGuard: ApiKeyGuard,
   ) {
     this.authTypeGuardMap = {
-      [AuthType.Bearer]: this.accessTokenGuard,
-      [AuthType.None]: { canActivate: () => true },
+      [AuthTypeEnum.Bearer]: this.accessTokenGuard,
+      [AuthTypeEnum.None]: { canActivate: () => true },
+      [AuthTypeEnum.ApiKey]: this.apiKeyGuard,
     };
   }
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const authTypes = this.reflector.getAllAndOverride<AuthType[]>(
+    const authTypes = this.reflector.getAllAndOverride<AuthTypeEnum[]>(
       'authTypes',
       [context.getHandler(), context.getClass()],
     ) ?? [AuthenticationGuard.defaultAuthType];

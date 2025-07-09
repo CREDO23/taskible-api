@@ -14,7 +14,7 @@ export class ApiKeyEntity implements ApiKeyInterface {
   id: number;
 
   @Column()
-  key: string;
+  hashedKey: string;
 
   @Column()
   uuid: string;
