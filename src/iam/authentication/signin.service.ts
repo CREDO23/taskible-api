@@ -36,7 +36,7 @@ export class SigninService {
       throw new BadRequestException('Invalid credentials');
     }
 
-    const doesPasswordMatch = await this.hashingService.comparePasswords(
+    const doesPasswordMatch = await this.hashingService.compare(
       data.password,
       doesUserExist.password,
     );

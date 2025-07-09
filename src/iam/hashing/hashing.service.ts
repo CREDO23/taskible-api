@@ -2,10 +2,10 @@ import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export abstract class HashingService {
-  abstract hashPassword(password: string | Buffer): Promise<string>;
+  abstract hash(plantText: string | Buffer): Promise<string>;
 
-  abstract comparePasswords(
-    password: string | Buffer,
-    hashedPassword: string,
+  abstract compare(
+    plantText: string | Buffer,
+    hashedText: string,
   ): Promise<boolean>;
 }

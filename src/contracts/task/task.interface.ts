@@ -1,7 +1,7 @@
-import { BaseInterface } from '../common';
+import { BaseEntityInterface } from '../common';
 import { UserInterface } from '../user/user.interface';
 
-export interface TaskInterface extends BaseInterface {
+export interface TaskInterface extends BaseEntityInterface {
   title: string;
   taskNumber: number;
   description?: string;

@@ -14,6 +14,7 @@ import { RedisModule } from 'src/redis/redis.module';
 import { AccessTokenGuard } from './authentication/guards/access-token.guard';
 import { AuthenticationGuard } from './authentication/guards/authentication.guard';
 import { RolesGuard } from './authorization/guards/roles.guard';
+import { ApiKeysService } from './authentication/api-keys.service';
 
 @Module({
   imports: [
@@ -39,6 +40,7 @@ import { RolesGuard } from './authorization/guards/roles.guard';
     SignupService,
     AccessTokenGuard,
     RefreshTokenIdsStorage,
+    ApiKeysService,
   ],
   controllers: [AuthenticationController],
 })

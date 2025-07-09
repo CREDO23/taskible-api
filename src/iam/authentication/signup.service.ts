@@ -17,9 +17,7 @@ export class SignupService {
   ) {}
 
   async signup(user: SignupDto) {
-    const hashedPassword = await this.hashingService.hashPassword(
-      user.password,
-    );
+    const hashedPassword = await this.hashingService.hash(user.password);
 
     const newUser = this.userService.createUser({
       ...user,
