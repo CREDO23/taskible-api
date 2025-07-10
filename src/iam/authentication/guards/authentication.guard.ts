@@ -9,6 +9,7 @@ import { Reflector } from '@nestjs/core';
 import { AuthTypeEnum } from '../enums/auth-types.enums';
 import { AccessTokenGuard } from './access-token.guard';
 import { ApiKeyGuard } from '../../../api-key/guards/api-key.guard';
+import { AUTH_TYPE } from '../constant';
 
 @Injectable()
 export class AuthenticationGuard implements CanActivate {
@@ -31,7 +32,7 @@ export class AuthenticationGuard implements CanActivate {
   }
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const authTypes = this.reflector.getAllAndOverride<AuthTypeEnum[]>(
-      'authTypes',
+      AUTH_TYPE,
       [context.getHandler(), context.getClass()],
     ) ?? [AuthenticationGuard.defaultAuthType];
 
