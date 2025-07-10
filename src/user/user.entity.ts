@@ -1,4 +1,4 @@
-import { RoleEnum } from 'src/contracts/role/role.enums';
+import { RoleEnum } from 'src/role/types/role.enums';
 import { UserInterface } from 'src/contracts/user/user.interface';
 import { TaskEntity } from 'src/task/task.entity';
 import {
@@ -7,16 +7,17 @@ import {
   Entity,
   JoinTable,
   ManyToMany,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { ApiKeyEntity } from '../api-key/api-key.entity';
 
 @Entity('user')
 export class UserEntity implements UserInterface {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ unique: true })
   name: string;
 
   @Column({ unique: true })
@@ -28,13 +29,16 @@ export class UserEntity implements UserInterface {
   @Column({
     type: 'enum',
     enum: RoleEnum,
-    default: RoleEnum.USER,
+    default: RoleEnum.ADMIN,
   })
   role: string;
 
   @JoinTable({ name: 'user_tasks' })
   @ManyToMany(() => TaskEntity, (task) => task.assignees)
   tasks: TaskEntity[];
+
+  @OneToMany(() => ApiKeyEntity, (apiKey) => apiKey.user)
+  apiKeys: ApiKeyEntity[];
 
   @CreateDateColumn()
   createdAt: Date;

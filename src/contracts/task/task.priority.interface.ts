@@ -1,5 +1,5 @@
-import { BaseInterface } from '../common';
+import { BaseEntityInterface } from '../common';
 
-export interface TaskPriorityInterface extends BaseInterface {
+export interface TaskPriorityInterface extends BaseEntityInterface {
   name: string;
 }

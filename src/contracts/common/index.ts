@@ -1,7 +1,7 @@
-export interface BaseInterface {
+export interface BaseEntityInterface {
   readonly id: number;
   createdAt: Date;
   updatedAt: Date;
 }
 
-export type OmittedFieldsOnCreate = 'id' | 'createdAt' | 'updatedAt';
+export type CreateEntityOmittedFields = 'id' | 'createdAt' | 'updatedAt';

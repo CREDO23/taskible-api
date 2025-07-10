@@ -1,9 +1,3 @@
-export enum RoleEnum {
-  ADMIN = 'admin',
-  USER = 'user',
-  MANAGER = 'manager',
-}
-
 export enum RolePermissionEnum {
   CREATE_USER = 'create_user',
   UPDATE_USER = 'update_user',
