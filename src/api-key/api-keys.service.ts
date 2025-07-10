@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { GeneratedApiKeyPayload } from 'src/iam/api-key/types/generated-api-key-payload.type';
-import { HashingService } from '../hashing/hashing.service';
+import { GeneratedApiKeyPayload } from 'src/api-key/types/generated-api-key-payload.type';
 import { randomUUID } from 'node:crypto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ApiKeyEntity } from 'src/iam/api-key/entities/api-key.entity';
+import { ApiKeyEntity } from 'src/api-key/api-key.entity';
 import { Repository } from 'typeorm';
+import { HashingService } from 'src/iam/hashing/hashing.service';
 
 @Injectable()
 export class ApiKeyService {
@@ -30,7 +30,6 @@ export class ApiKeyService {
     });
 
     await this.apiKeyRepository.save(newApiKey);
-
     return {
       apiKey,
       hashedKey,
@@ -38,7 +37,7 @@ export class ApiKeyService {
   }
 
   private generateApiKey(id: string): string {
-    const apiKey = `${id}:${randomUUID()}`;
+    const apiKey = `${id} ${randomUUID()}`;
     return Buffer.from(apiKey).toString('base64');
   }
 
@@ -52,7 +51,7 @@ export class ApiKeyService {
   }
 
   extractIdFromApiKey(apiKey: string): string {
-    const [id] = Buffer.from(apiKey, 'base64').toString('ascii').split(':');
+    const [id] = Buffer.from(apiKey, 'base64').toString('ascii').split(' ');
     return id;
   }
 
@@ -64,6 +63,16 @@ export class ApiKeyService {
 
       relations: {
         user: true,
+      },
+    });
+  }
+
+  async getApiKeysByUserId(userId: number): Promise<ApiKeyEntity[]> {
+    return this.apiKeyRepository.find({
+      where: {
+        user: {
+          id: userId,
+        },
       },
     });
   }

@@ -8,7 +8,7 @@ import {
 import { Reflector } from '@nestjs/core';
 import { AuthTypeEnum } from '../enums/auth-types.enums';
 import { AccessTokenGuard } from './access-token.guard';
-import { ApiKeyGuard } from './api-key.guard';
+import { ApiKeyGuard } from '../../../api-key/guards/api-key.guard';
 
 @Injectable()
 export class AuthenticationGuard implements CanActivate {

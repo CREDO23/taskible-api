@@ -10,6 +10,7 @@ import { ConfigModule } from '@nestjs/config';
 import { CommonModule } from './common/common.module';
 import { IamModule } from './iam/iam.module';
 import { RedisModule } from './redis/redis.module';
+import { ApiKeyModule } from './api-key/api-key.module';
 import * as Joi from '@hapi/joi';
 
 @Module({
@@ -42,6 +43,7 @@ import * as Joi from '@hapi/joi';
     TaskPriorityModule,
     CommonModule,
     IamModule,
+    ApiKeyModule,
   ],
 })
 export class AppModule {}

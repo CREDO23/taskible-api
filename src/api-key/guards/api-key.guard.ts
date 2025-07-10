@@ -1,5 +1,5 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
-import { AuthTypeEnum } from '../enums/auth-types.enums';
+import { AuthTypeEnum } from '../../iam/authentication/enums/auth-types.enums';
 import { Request } from 'express';
 import { ApiKeyService } from '../api-keys.service';
 import { REQUEST_USER_KEY } from 'src/iam/constants';
@@ -18,15 +18,16 @@ export class ApiKeyGuard implements CanActivate {
     try {
       const apiKeyEntityId = this.apiKeyService.extractIdFromApiKey(apiKey);
 
-      const { user, hashedKey } =
+      const apiKeyEntity =
         await this.apiKeyService.getApiKeyByUuid(apiKeyEntityId);
+
+      const { user, hashedKey } = apiKeyEntity;
 
       // Is API key valid?
       await this.apiKeyService.validateApiKey(apiKey, hashedKey);
 
       request[REQUEST_USER_KEY] = {
         sub: user.id,
-        userId: user.id,
         email: user.email,
         role: user.role,
       };

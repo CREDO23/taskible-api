@@ -11,7 +11,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { ApiKeyEntity } from '../iam/api-key/entities/api-key.entity';
+import { ApiKeyEntity } from '../api-key/api-key.entity';
 
 @Entity('user')
 export class UserEntity implements UserInterface {
@@ -37,7 +37,6 @@ export class UserEntity implements UserInterface {
   @ManyToMany(() => TaskEntity, (task) => task.assignees)
   tasks: TaskEntity[];
 
-  @JoinTable({ name: 'user_api_keys' })
   @OneToMany(() => ApiKeyEntity, (apiKey) => apiKey.user)
   apiKeys: ApiKeyEntity[];
 
