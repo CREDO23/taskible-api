@@ -12,16 +12,25 @@ describe('BcryptService', () => {
     service = module.get<BcryptService>(BcryptService);
   });
 
-  it('should hash a password', async () => {
-    const password = 'password';
-    const hashedPassword = await service.hash(password);
-    expect(hashedPassword).not.toEqual(password);
+  it('should hash a string', async () => {
+    const plainString = 'password';
+    const hashedString = await service.hash(plainString);
+    expect(hashedString).not.toEqual(plainString);
   });
 
-  it('should compare a password', async () => {
-    const password = 'password';
-    const hashedPassword = await service.hash(password);
-    const isMatch = await service.compare(password, hashedPassword);
-    expect(isMatch).toBe(true);
+  describe('Should compare two strings', () => {
+    it('should return true if the strings match', async () => {
+      const plainString = 'password';
+      const hashedString = await service.hash(plainString);
+      const isMatch = await service.compare(plainString, hashedString);
+      expect(isMatch).toBe(true);
+    });
+
+    it('should return false if the strings do not match', async () => {
+      const plainString = 'password';
+      const hashedString = await service.hash(plainString);
+      const isMatch = await service.compare('wrongPassword', hashedString);
+      expect(isMatch).toBe(false);
+    });
   });
 });
