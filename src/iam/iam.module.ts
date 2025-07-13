@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { HashingService } from './hashing/hashing.service';
-import { BcryptService } from './hashing/bcrypt.service';
+import { HashingService } from '../common/services/hashing/hashing.service';
+import { BcryptService } from '../common/services/hashing/bcrypt.service';
 import { AuthenticationController } from './authentication/authentication.controller';
 import { SigninService } from './authentication/signin.service';
 import { SignupService } from './authentication/signup.service';
