@@ -4,7 +4,7 @@ import { randomUUID } from 'node:crypto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ApiKeyEntity } from 'src/api-key/api-key.entity';
 import { Repository } from 'typeorm';
-import { HashingService } from 'src/iam/hashing/hashing.service';
+import { HashingService } from 'src/common/services/hashing/hashing.service';
 
 @Injectable()
 export class ApiKeyService {

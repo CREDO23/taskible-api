@@ -9,8 +9,8 @@ import {
 import { ApiKeyService } from './api-keys.service';
 import { CreateApiKeyDto } from './DTOs/create-api-key.dto';
 import { ActiveUser } from 'src/iam/decorators/active-user.decorator';
-import { Auth } from 'src/iam/authentication/decorators/auth.decorator';
-import { AuthTypeEnum } from 'src/iam/authentication/enums/auth-types.enums';
+import { AuthenticationType } from 'src/iam/authentication/decorators/auth.decorator';
+import { AuthenticationTypeEnum } from 'src/iam/authentication/enums/auth-types.enums';
 import { ApiForbiddenResponse } from '@nestjs/swagger';
 
 @Controller('api-keys')
@@ -18,7 +18,7 @@ export class ApiKeyController {
   constructor(private readonly apiKeyService: ApiKeyService) {}
 
   @Post()
-  @Auth(AuthTypeEnum.Bearer)
+  @AuthenticationType(AuthenticationTypeEnum.Bearer)
   @HttpCode(HttpStatus.CREATED)
   @ApiForbiddenResponse({ description: 'Forbidden.' })
   async createApiKey(
@@ -31,7 +31,7 @@ export class ApiKeyController {
   }
 
   @Get('/me')
-  @Auth(AuthTypeEnum.Bearer)
+  @AuthenticationType(AuthenticationTypeEnum.Bearer)
   @HttpCode(HttpStatus.OK)
   @ApiForbiddenResponse({ description: 'Forbidden.' })
   async getMyApiKeys(@ActiveUser('sub') userId: number) {

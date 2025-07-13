@@ -5,7 +5,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { UserService } from 'src/user/user.service';
-import { HashingService } from '../hashing/hashing.service';
+import { HashingService } from '../../common/services/hashing/hashing.service';
 import { SigninDto } from './DTOs/signin.dto';
 import { ConfigType } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
@@ -13,7 +13,7 @@ import jwtConfig from '../config/jwt.config';
 import { UserEntity } from 'src/user/user.entity';
 import { RefreshTokenDto } from './DTOs/refresh-token.dto';
 import { randomUUID } from 'crypto';
-import { RefreshTokenIdsStorage } from './refresh-token-ids.storage';
+import { RefreshTokenIdsStorage } from './refresh-token-ids-storage.service';
 import { RefreshTokenPayloadType } from './types/refresh-token-payload.type';
 
 @Injectable()

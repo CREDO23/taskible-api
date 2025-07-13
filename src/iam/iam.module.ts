@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { HashingService } from './hashing/hashing.service';
-import { BcryptService } from './hashing/bcrypt.service';
+import { HashingService } from '../common/services/hashing/hashing.service';
+import { BcryptService } from '../common/services/hashing/bcrypt.service';
 import { AuthenticationController } from './authentication/authentication.controller';
 import { SigninService } from './authentication/signin.service';
 import { SignupService } from './authentication/signup.service';
@@ -9,7 +9,7 @@ import jwtConfig from './config/jwt.config';
 import { ConfigModule } from '@nestjs/config';
 import { UserModule } from 'src/user/user.module';
 import { APP_GUARD } from '@nestjs/core';
-import { RefreshTokenIdsStorage } from './authentication/refresh-token-ids.storage';
+import { RefreshTokenIdsStorage } from './authentication/refresh-token-ids-storage.service';
 import { RedisModule } from 'src/redis/redis.module';
 import { AccessTokenGuard } from './authentication/guards/access-token.guard';
 import { AuthenticationGuard } from './authentication/guards/authentication.guard';

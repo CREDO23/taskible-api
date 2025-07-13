@@ -3,8 +3,8 @@ import { ApiKeyController } from './api-key.controller';
 import { ApiKeyService } from './api-keys.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ApiKeyEntity } from './api-key.entity';
-import { BcryptService } from 'src/iam/hashing/bcrypt.service';
-import { HashingService } from 'src/iam/hashing/hashing.service';
+import { BcryptService } from 'src/common/services/hashing/bcrypt.service';
+import { HashingService } from 'src/common/services/hashing/hashing.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([ApiKeyEntity])],
