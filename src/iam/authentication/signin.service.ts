@@ -13,7 +13,7 @@ import jwtConfig from '../config/jwt.config';
 import { UserEntity } from 'src/user/user.entity';
 import { RefreshTokenDto } from './DTOs/refresh-token.dto';
 import { randomUUID } from 'crypto';
-import { RefreshTokenIdsStorage } from './refresh-token-ids.storage';
+import { RefreshTokenIdsStorage } from './refresh-token-ids-storage.service';
 import { RefreshTokenPayloadType } from './types/refresh-token-payload.type';
 
 @Injectable()
