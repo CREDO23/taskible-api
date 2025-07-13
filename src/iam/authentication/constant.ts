@@ -1,1 +1,1 @@
-export const AUTH_TYPE = 'authType';
+export const AUTHENTICATION_TYPE = 'authenticationType';

@@ -3,9 +3,9 @@ import { SigninService } from './signin.service';
 import { SignupService } from './signup.service';
 import { SigninDto } from './DTOs/signin.dto';
 import { SignupDto } from './DTOs/signup.dto';
-import { AuthTypeEnum } from './enums/auth-types.enums';
+import { AuthenticationTypeEnum } from './enums/auth-types.enums';
 import { RefreshTokenDto } from './DTOs/refresh-token.dto';
-import { Auth } from './decorators/auth.decorator';
+import { AuthenticationType } from './decorators/auth.decorator';
 
 @Controller('auth')
 export class AuthenticationController {
@@ -14,7 +14,7 @@ export class AuthenticationController {
     private signupService: SignupService,
   ) {}
 
-  @Auth(AuthTypeEnum.None)
+  @AuthenticationType(AuthenticationTypeEnum.None)
   @Post('signin')
   @HttpCode(HttpStatus.OK)
   signin(@Body() userData: SigninDto) {
@@ -30,14 +30,14 @@ export class AuthenticationController {
     // });
   }
 
-  @Auth(AuthTypeEnum.None)
+  @AuthenticationType(AuthenticationTypeEnum.None)
   @Post('refresh-token')
   @HttpCode(HttpStatus.OK)
   refresh(@Body() data: RefreshTokenDto) {
     return this.signinService.refreshTokens(data);
   }
 
-  @Auth(AuthTypeEnum.None)
+  @AuthenticationType(AuthenticationTypeEnum.None)
   @Post('signup')
   @HttpCode(HttpStatus.CREATED)
   signup(@Body() userData: SignupDto) {
